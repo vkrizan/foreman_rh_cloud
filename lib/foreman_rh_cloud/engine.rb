@@ -84,6 +84,7 @@ module ForemanRhCloud
                 '/foreman_rh_cloud/insights_cloud': [:index], # for bookmarks and later for showing the page
                 'insights_cloud/hits': [:index, :show, :auto_complete_search, :resolutions],
                 'insights_cloud/settings': [:index, :show],
+                'insights_cloud/ui_requests': [:forward_request],
                 'react': [:index],
               },
               :resource_type => ::InsightsHit.name
@@ -114,8 +115,7 @@ module ForemanRhCloud
               caption: N_('Inventory Upload'),
               url: '/foreman_rh_cloud/inventory_upload',
               url_hash: { controller: :react, action: :index },
-              parent: :insights_menu,
-              if: -> { !ForemanRhCloud.with_local_advisor_engine? }
+              parent: :insights_menu
             menu :top_menu, :insights_hits, caption: N_('Recommendations'), url: '/foreman_rh_cloud/insights_cloud', url_hash: { controller: :react, action: :index }, parent: :insights_menu
             menu :top_menu,
               :insights_vulnerability,
@@ -165,6 +165,8 @@ module ForemanRhCloud
         ::Katello::UINotifications::Subscriptions::ManifestImportSuccess.include ForemanInventoryUpload::Notifications::ManifestImportSuccessNotificationOverride if defined?(Katello)
 
         ::Host::Managed.include RhCloudHost
+
+        ::Katello::Api::Rhsm::CandlepinDynflowProxyController.include InsightsCloud::PackageProfileUploadExtensions
       end
     end
 
@@ -257,6 +259,6 @@ module ForemanRhCloud
   end
 
   def self.on_prem_smart_proxy_features
-    ['Insights']
+    ['insights']
   end
 end
