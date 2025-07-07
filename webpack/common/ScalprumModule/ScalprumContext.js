@@ -3,10 +3,6 @@ import PropTypes from 'prop-types';
 import { initialize } from '@scalprum/core'
 import { ScalprumProvider } from '@scalprum/react-core';
 
-//const scStore = initialize()
-
-// export const ScalprumContext = createContext(null);
-
 export const ScalprumContextWrapper = ({ children }) => {
   const config = {
     'vulnerability': {
