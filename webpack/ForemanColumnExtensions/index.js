@@ -46,4 +46,11 @@ const hostsIndexColumnExtensions = [
   },
 ];
 
+
+hostsIndexColumnExtensions.forEach(column => {
+  column.tableName = 'hosts';
+  column.categoryName = 'Insights';
+  column.categoryKey = 'insights';
+});
+
 export default hostsIndexColumnExtensions;
