@@ -23,10 +23,10 @@ module ForemanRhCloud
 
     def prepare_tags(user, organization, location)
       [
-        CGI.escape(TagsAuth.auth_tag_for(user)),
-        CGI.escape("satellite/organization=#{organization}"),
-        CGI.escape("satellite/location=#{location}"),
-      ].map { |tag_value| [:tag, tag_value] }
+        TagsAuth.auth_tag_for(user),
+        "satellite/organization=#{organization}",
+        "satellite/location=#{location}",
+      ].map { |tag_value| [:tags, tag_value] }
     end
 
     def prepare_request_opts(original_request, path, forward_payload, forward_params)

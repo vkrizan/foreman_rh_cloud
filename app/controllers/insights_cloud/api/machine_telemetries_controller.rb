@@ -15,7 +15,11 @@ module InsightsCloud::Api
 
     # The method that "proxies" requests over to Cloud
     def forward_request
-      certs = candlepin_id_cert @organization
+      #certs = candlepin_id_cert @organization
+      certs = {
+        cert: File.read(Setting[:ssl_certificate]),
+        key: File.read(Setting[:ssl_priv_key]),
+      }
       begin
         @cloud_response = ::ForemanRhCloud::CloudRequestForwarder.new.forward_request(request, controller_name, @branch_id, certs)
       rescue RestClient::Exceptions::Timeout => e
