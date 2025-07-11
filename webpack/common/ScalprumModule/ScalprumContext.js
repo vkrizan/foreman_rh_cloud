@@ -12,37 +12,6 @@ export const ScalprumContextWrapper = ({ children }) => {
     },
   };
 
-  const scStore = useMemo(() => initialize(        {pluginSDKOptions: {
-          pluginLoaderOptions: {
-            transformPluginManifest: manifest => {
-              if (
-                manifest.baseURL === 'auto' &&
-                config[manifest.name]?.cdnPath
-              ) {
-                const _cdnPath = config[manifest.name]?.cdnPath;
-                return {
-                  ...manifest,
-                  baseURL: _cdnPath,
-                  loadScripts: manifest.loadScripts.map(
-                    script => `${_cdnPath}${script}`
-                  ),
-                };
-              }
-              return manifest;
-            },
-          },
-        },
-        api: {
-          chrome: {
-            isBeta: () => false,
-            on: () => {},
-            auth: {
-              getUser: () => Promise.resolve(mockUser),
-            },
-          },
-        },
-        config}), [])
-
   const mockUser = {
     entitlements: {},
     identity: {
@@ -67,7 +36,36 @@ export const ScalprumContextWrapper = ({ children }) => {
   };
   return (
       <ScalprumProvider
-        scalprum={scStore}
+        pluginSDKOptions= {{
+          pluginLoaderOptions: {
+            transformPluginManifest: manifest => {
+              if (
+                manifest.baseURL === 'auto' &&
+                config[manifest.name]?.cdnPath
+              ) {
+                const _cdnPath = config[manifest.name]?.cdnPath;
+                return {
+                  ...manifest,
+                  baseURL: _cdnPath,
+                  loadScripts: manifest.loadScripts.map(
+                    script => `${_cdnPath}${script}`
+                  ),
+                };
+              }
+              return manifest;
+            }
+          }
+        }}
+        api={{
+          chrome: {
+            isBeta: () => false,
+            on: () => {},
+            auth: {
+              getUser: () => Promise.resolve(mockUser),
+            }
+          }
+        }}
+        config={config}
     >
       {children}
     </ScalprumProvider>
