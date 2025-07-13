@@ -5,3 +5,5 @@ import { registerRoutes } from './ForemanRhCloudPages';
 registerReducers();
 registerFills();
 registerRoutes();
+
+registerColumns(hostsIndexColumnExtensions);
